@@ -22,10 +22,22 @@ class Game:
         return [result for result in Result.all if result.game == self]
 
     def players(self):
-        return [player for player in Player.all if player.game == self]
+        no_dupes = []
+        for result in Result.all:
+            if result.game == self:
+                if result.player not in no_dupes:
+                    no_dupes.append(result.player)
+        return no_dupes
 
     def average_score(self, player):
-        pass
+        scores_total = 0
+        games_played = 0
+        for result in Result.all:
+            if result.player == player:
+                scores_total += result.score
+                games_played += 1
+        avg_score = scores_total / games_played
+        return avg_score
 
 class Player:
 
@@ -41,7 +53,7 @@ class Player:
     
     @username.setter
     def username(self, value):
-        if isinstance((value, str) and (2 <= len(str) <= 16)):
+        if isinstance(value, str) and 2 <= len(value) <= 16:
             self._username = value
         else: 
             raise Exception("value must be a string with 2-16 characters.")
@@ -50,7 +62,7 @@ class Player:
         return [result for result in Result.all if result.player == self]
 
     def games_played(self):
-        return [game for game in Game.all if game.player == self]
+        return len([result.game for result in Result.all if result.player == self])
 
     def played_game(self, game):
         for result in Result.all:
