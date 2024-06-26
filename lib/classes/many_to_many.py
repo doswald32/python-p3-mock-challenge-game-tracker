@@ -4,7 +4,7 @@ class Game:
     all = []
 
     def __init__(self, title):
-        self._title = title
+        self.title = title
         Game.all.append(self)
 
     @property
@@ -13,7 +13,7 @@ class Game:
     
     @title.setter
     def title(self, value):
-        if isinstance((value, str) and len(value) > 0):
+        if not hasattr(self, 'title') and isinstance(value, str) and len(value) > 0:
             self._title = value
         else:
             raise Exception("title must be a string with at least one character.")
@@ -44,7 +44,7 @@ class Player:
     all = []
 
     def __init__(self, username):
-        self._username = username
+        self.username = username
         Player.all.append(self)
 
     @property
@@ -62,7 +62,7 @@ class Player:
         return [result for result in Result.all if result.player == self]
 
     def games_played(self):
-        return len([result.game for result in Result.all if result.player == self])
+        return [result.game for result in Result.all if result.player == self]
 
     def played_game(self, game):
         for result in Result.all:
@@ -79,9 +79,9 @@ class Result:
     all = []
 
     def __init__(self, player, game, score):
-        self._player = player
-        self._game = game
-        self._score = score
+        self.player = player
+        self.game = game
+        self.score = score
         Result.all.append(self)
 
     @property
@@ -90,7 +90,7 @@ class Result:
     
     @score.setter
     def score(self, value):
-        if isinstance((value, int) and 1 <= value <= 5000):
+        if not hasattr(self, 'score') and isinstance(value, int) and 1 <= value <= 5000:
             self._score = value
         else:
             raise Exception("score must be an interger between 1-5000.")
@@ -101,7 +101,7 @@ class Result:
     
     @player.setter
     def player(self, value):
-        if isinstance(value, Player):
+        if not hasattr(self, 'player') and isinstance(value, Player):
             self._player = value
         else:
             raise Exception("player must be of class Player.")
@@ -112,8 +112,8 @@ class Result:
     
     @game.setter
     def game(self, value):
-        if isinstance(value, Game):
-            self_game = value
+        if not hasattr(self, 'game') and isinstance(value, Game):
+            self._game = value
         else: 
             raise Exception("game must be of class Game.")
 
